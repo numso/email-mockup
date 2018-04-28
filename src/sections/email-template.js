@@ -17,10 +17,6 @@ const Textarea = styled.textarea`
   min-height: 200px;
 `
 
-const Button = styled.button`
-  display: block;
-`
-
 export default class App extends React.Component {
   constructor () {
     super()
@@ -45,12 +41,12 @@ export default class App extends React.Component {
           onChange={e => this.setState({ message: e.target.value })}
           value={message}
         />
-        <Button
+        <button
           disabled={!subject || !message}
           onClick={() => this.props.onSend(subject, message)}
         >
           Email
-        </Button>
+        </button>
       </div>
     )
   }

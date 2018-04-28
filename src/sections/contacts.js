@@ -66,7 +66,7 @@ export default class App extends React.Component {
       sort: 'name',
       ascending: true,
       filter: '',
-      selectedUsers: []
+      recipients: []
     }
     this.handleStartEmail = this.handleStartEmail.bind(this)
   }
@@ -80,23 +80,21 @@ export default class App extends React.Component {
   }
 
   handleUserChecked (userId) {
-    const { selectedUsers } = this.state
-    if (selectedUsers.includes(userId)) {
-      this.setState({
-        selectedUsers: selectedUsers.filter(id => id !== userId)
-      })
+    const { recipients } = this.state
+    if (recipients.includes(userId)) {
+      this.setState({ recipients: recipients.filter(id => id !== userId) })
     } else {
-      this.setState({ selectedUsers: [...selectedUsers, userId] })
+      this.setState({ recipients: [...recipients, userId] })
     }
   }
 
   handleStartEmail () {
-    this.props.onSelect(this.state.selectedUsers)
-    this.setState({ selectedUsers: [] })
+    this.props.onSelect(this.state.recipients)
+    this.setState({ recipients: [] })
   }
 
   render () {
-    const computedUsers = filterAndSort(users, this.state)
+    const usersToShow = filterAndSort(users, this.state)
     return (
       <div>
         <Table>
@@ -119,12 +117,12 @@ export default class App extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {computedUsers.map(user => (
+            {usersToShow.map(user => (
               <tr key={user.id}>
                 <TD onClick={() => this.handleUserChecked(user.id)}>
                   <input
                     type='checkbox'
-                    checked={this.state.selectedUsers.includes(user.id)}
+                    checked={this.state.recipients.includes(user.id)}
                     onChange={() => this.handleUserChecked(user.id)}
                   />
                 </TD>
@@ -154,7 +152,7 @@ export default class App extends React.Component {
           </div>
           <button
             onClick={this.handleStartEmail}
-            disabled={this.state.selectedUsers.length === 0}
+            disabled={this.state.recipients.length === 0}
           >
             Email Users
           </button>
