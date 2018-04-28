@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import EmailTemplate from './email-template'
+import sendEmail from './send-email'
 import allUsers from './users'
 
 const Wrapper = styled.div`
@@ -22,8 +24,12 @@ export default class App extends React.Component {
     this.state = {
       sort: 'name',
       ascending: true,
-      filter: ''
+      filter: '',
+      selectedUsers: [],
+      recipients: null
     }
+    this.handleStartEmail = this.handleStartEmail.bind(this)
+    this.handleSendEmail = this.handleSendEmail.bind(this)
   }
 
   updateSort (key) {
@@ -32,6 +38,26 @@ export default class App extends React.Component {
     } else {
       this.setState({ ascending: true, sort: key })
     }
+  }
+
+  handleUserChecked (userId) {
+    if (this.state.selectedUsers.includes(userId)) {
+      this.setState({
+        selectedUsers: this.state.selectedUsers.filter(id => id !== userId)
+      })
+    } else {
+      this.setState({ selectedUsers: [...this.state.selectedUsers, userId] })
+    }
+  }
+
+  handleStartEmail () {
+    this.setState({ selectedUsers: [], recipients: this.state.selectedUsers })
+  }
+
+  handleSendEmail (subject, message) {
+    const { recipients } = this.state
+    this.setState({ recipients: null })
+    sendEmail(recipients, subject, message)
   }
 
   render () {
@@ -59,6 +85,7 @@ export default class App extends React.Component {
           <table>
             <thead>
               <tr>
+                <th />
                 {headers.map(header => (
                   <th
                     onClick={() => this.updateSort(header.key)}
@@ -72,6 +99,13 @@ export default class App extends React.Component {
             <tbody>
               {users.map(user => (
                 <tr key={user.id}>
+                  <td>
+                    <input
+                      type='checkbox'
+                      checked={this.state.selectedUsers.includes(user.id)}
+                      onChange={() => this.handleUserChecked(user.id)}
+                    />
+                  </td>
                   {headers.map(header => (
                     <td key={header.key}>{user[header.key]}</td>
                   ))}
@@ -79,6 +113,15 @@ export default class App extends React.Component {
               ))}
             </tbody>
           </table>
+          <button
+            onClick={this.handleStartEmail}
+            disabled={this.state.selectedUsers.length === 0}
+          >
+            Email Users
+          </button>
+          {this.state.recipients && (
+            <EmailTemplate onSend={this.handleSendEmail} />
+          )}
         </div>
       </Wrapper>
     )
