@@ -17,7 +17,7 @@ const Textarea = styled.textarea`
   min-height: 200px;
 `
 
-export default class App extends React.Component {
+export default class EmailTemplate extends React.Component {
   constructor () {
     super()
     this.state = {

@@ -7,9 +7,16 @@
   "license": "MIT",
   "scripts": {
     "start": "parcel -p 3000 src/index.html",
-    "test": "echo \"no tests yet\""
+    "pretest": "standard",
+    "test": "jest --collectCoverage"
   },
   "devDependencies": {
+    "babel-jest": "22.4.3",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-react": "6.24.1",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "jest": "22.4.3",
     "parcel-bundler": "1.7.1",
     "standard": "11.0.1"
   },

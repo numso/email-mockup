@@ -59,7 +59,7 @@ function filterAndSort (users, { sort, ascending, filter }) {
   return filteredUsers
 }
 
-export default class App extends React.Component {
+export default class Contacts extends React.Component {
   constructor () {
     super()
     this.state = {
